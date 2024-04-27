@@ -3,3 +3,5 @@ gulpfile.js
 package-lock.json
 package.json
 gulp/
+gulp/config/
+gulp/tasks/

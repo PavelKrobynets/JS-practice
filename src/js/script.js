@@ -100,4 +100,26 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
   setClock(".timer", deadline);
+
+  // Modal
+
+  const modalTrigger = document.querySelectorAll("[data-modal]"),
+    modal = document.querySelector(".modal"),
+    modalCloseBtn = document.querySelector("[data-close]");
+
+		modalTrigger.forEach(btn => {
+			btn.addEventListener("click", () => {
+				// modal.classList.add("visible");
+				// modal.classList.remove("hidden");
+				modal.classList.toggle('visible');
+				document.body.style.overflow = "hidden";
+			});
+		});
+
+  modalCloseBtn.addEventListener("click", () => {
+    // modal.classList.add("hidden");
+    // modal.classList.remove("visible");
+		modal.classList.toggle('visible');
+		document.body.style.overflow = "visible";
+  });
 });

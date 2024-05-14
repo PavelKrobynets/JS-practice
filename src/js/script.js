@@ -234,31 +234,35 @@ window.addEventListener("DOMContentLoaded", () => {
     postData(item);
   });
 
-  function postData(form) {
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
+	// Form Data
+  // function postData(form) {
+  //   form.addEventListener("submit", (event) => {
+  //     event.preventDefault();
 
-      const statusMessage = document.createElement("div");
-      statusMessage.classList.add("status");
-      statusMessage.textContent = mesasge.loading;
-      form.append(statusMessage);
+  //     const statusMessage = document.createElement("div");
+  //     statusMessage.classList.add("status");
+  //     statusMessage.textContent = mesasge.loading;
+  //     form.append(statusMessage);
 
-      const reqest = new XMLHttpRequest();
-      reqest.open("POST", "server.php");
+  //     const reqest = new XMLHttpRequest();
+  //     reqest.open("POST", "server.php");
 
-      reqest.setRequestHeader("Content-type", "multipart/form-data");
-      let formData = new FormData(form);
+  //     // reqest.setRequestHeader("Content-type", "multipart/form-data");
+  //     let formData = new FormData(form);
 
-      reqest.send(formData);
+  //     reqest.send(formData);
 
-      reqest.addEventListener("load", () => {
-        if (reqest.status === 200) {
-          console.log(reqest.responseText);
-          statusMessage.textContent = mesasge.succes;
-        } else {
-          statusMessage.textContent = mesasge.error;
-        }
-      });
-    });
-  }
+  //     reqest.addEventListener("load", () => {
+  //       if (reqest.status === 200) {
+  //         console.log(reqest.responseText);
+  //         statusMessage.textContent = mesasge.succes;
+  //         form.reset();
+  //         setTimeout(() => {statusMessage.remove();}, 2000);
+  //       } else {
+  //         statusMessage.textContent = mesasge.error;
+  //       }
+  //     });
+  //   });
+  // }
+
 });

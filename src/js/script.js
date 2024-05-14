@@ -112,7 +112,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // modal.classList.remove("hidden");
     modal.classList.toggle("visible");
     document.body.style.overflow = "hidden";
-    clearInterval(modalTimerId);
+    // clearInterval(modalTimerId);
   }
 
   modalTrigger.forEach((btn) => {
@@ -173,11 +173,11 @@ window.addEventListener("DOMContentLoaded", () => {
     showOnPage() {
       this.changeToUAH();
       const element = document.createElement("div");
-			if(this.classes[0]){
-				this.classes.forEach((className) => element.classList.add(className));}
-				else{
-					element.classList.add("menu__item");
-				}
+      if (this.classes[0]) {
+        this.classes.forEach((className) => element.classList.add(className));
+      } else {
+        element.classList.add("menu__item");
+      }
       element.innerHTML = `
 					<img src=${this.src} alt=${this.alt}>
 					<h3 class="menu__item-subtitle">${this.title}</h3>
@@ -220,4 +220,45 @@ window.addEventListener("DOMContentLoaded", () => {
     `.menu .container`,
     `menu__item`
   ).showOnPage();
+
+  // Forms
+
+  const forms = document.querySelectorAll("form"),
+    mesasge = {
+      loading: "Loading",
+      succes: "Thank you! We'll conect you soon",
+      error: "Oops... Something went wrong",
+    };
+
+  forms.forEach((item) => {
+    postData(item);
+  });
+
+  function postData(form) {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const statusMessage = document.createElement("div");
+      statusMessage.classList.add("status");
+      statusMessage.textContent = mesasge.loading;
+      form.append(statusMessage);
+
+      const reqest = new XMLHttpRequest();
+      reqest.open("POST", "server.php");
+
+      reqest.setRequestHeader("Content-type", "multipart/form-data");
+      let formData = new FormData(form);
+
+      reqest.send(formData);
+
+      reqest.addEventListener("load", () => {
+        if (reqest.status === 200) {
+          console.log(reqest.responseText);
+          statusMessage.textContent = mesasge.succes;
+        } else {
+          statusMessage.textContent = mesasge.error;
+        }
+      });
+    });
+  }
 });

@@ -16,3 +16,9 @@ export const icons = () => {
     .src(app.path.src.icons)
     .pipe(app.gulp.dest(app.path.build.icons));
 };
+
+export const php = () => {
+  return app.gulp
+	.src(app.path.src.php)
+	.pipe(app.gulp.dest(app.path.build.php));
+};

@@ -231,6 +231,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		form.addEventListener("submit", (event) => {
 			event.preventDefault();
 			
+
       const statusMessage = document.createElement("div");
       statusMessage.classList.add("status");
       statusMessage.textContent = mesasge.loading;
@@ -250,12 +251,13 @@ window.addEventListener("DOMContentLoaded", () => {
           statusMessage.textContent = mesasge.succes;
         } else {
 					statusMessage.textContent = mesasge.error;
+
         }
       });
     });
   }
 
-	function showThanksModal() {
+	function showThanksModal(message) {
 		const prevModalDialog = document.querySelector('.modal__dialog');
 		prevModalDialog.classList.add('hide');
 		openModal();
@@ -265,16 +267,20 @@ window.addEventListener("DOMContentLoaded", () => {
 		thanksModal.innerHTML = `
 			<div class="modal__content">
 				<div class="modal__close" data-close>×</div>
-				<div class="modal__title">Thank you!</div>
+				<div class="modal__title">${mesasge}</div>
 			</div>
-		`
-
+		`;
+		document.querySelector('.modal').append(thanksModal);
+		setTimeout(() => {
+			thanksModal.remove();
+			prevModalDialog.classList.add('show');
+			prevModalDialog.classList.remove('hide');
+			closeModal();
+		}, 4000)
 	}
 
 	forms.forEach((item) => {
 		postData(item);
 	});
-
-
 
 });

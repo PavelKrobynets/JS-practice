@@ -109,7 +109,7 @@ window.addEventListener("DOMContentLoaded", () => {
   function openModal() {
     // modal.classList.add("visible");
     // modal.classList.remove("hidden");
-    modal.classList.toggle("visible");
+    modal.classList.add("visible");
     document.body.style.overflow = "hidden";
     // clearInterval(modalTimerId);
   }
@@ -121,7 +121,7 @@ window.addEventListener("DOMContentLoaded", () => {
   function closeModal() {
     // modal.classList.add("hidden");
     // modal.classList.remove("visible");
-    modal.classList.toggle("visible");
+    modal.classList.remove("visible");
     document.body.style.overflow = "visible";
   }
 
@@ -221,8 +221,8 @@ window.addEventListener("DOMContentLoaded", () => {
   // Forms
 
   const forms = document.querySelectorAll("form"),
-    mesasge = {
-      loading: "Loading",
+    message = {
+      loading: "icons/005 spinner.svg",
       succes: "Thank you! We'll conect you soon",
       error: "Oops... Something went wrong",
     };
@@ -231,27 +231,34 @@ window.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", (event) => {
       event.preventDefault();
 
-      const statusMessage = document.createElement("div");
-      statusMessage.classList.add("status");
-      statusMessage.textContent = mesasge.loading;
-      form.append(statusMessage);
+      const statusMessage = document.createElement("img");
+      statusMessage.src = message.loading;
+      statusMessage.style.cssText = `
+				display: block;
+				margin: 0 auto;
+			`;
+			form.insertAdjacentElement("afterend", statusMessage);	
 
       const reqest = new XMLHttpRequest();
       reqest.open("POST", "server.php");
 
-      reqest.setRequestHeader("Content-type", "multipart/form-data");
+      reqest.setRequestHeader("Content-type", "application/json");
       let formData = new FormData(form);
 
-      reqest.send(formData);
+      const obj = {};
+      formData.forEach(function (value, key) {
+        obj[key] = value;
+      });
+      reqest.send(JSON.stringify(obj));
 
       reqest.addEventListener("load", () => {
         if (reqest.status === 200) {
           console.log(reqest.responseText);
-          showThanksModal(mesasge.succes);
+          showThanksModal(message.succes);
           statusMessage.remove();
           form.reset();
         } else {
-          showThanksModal(mesasge.error);
+          showThanksModal(message.error);
         }
       });
     });
@@ -264,10 +271,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const thanksModal = document.createElement("div");
     thanksModal.classList.add("modal__dialog");
+    thanksModal.classList.add("show");
     thanksModal.innerHTML = `
 			<div class="modal__content">
 				<div class="modal__close" data-close>×</div>
-				<div class="modal__title">${mesasge}</div>
+				<div class="modal__title">${message}</div>
 			</div>
 		`;
     document.querySelector(".modal").append(thanksModal);

@@ -227,7 +227,18 @@ window.addEventListener("DOMContentLoaded", () => {
       error: "Oops... Something went wrong",
     };
 
-  function postData(form) {
+  const postData = async (url, data) => {
+    const res = await fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: data,
+		});
+		return await res.json();
+  };
+
+  function bindpostData(form) {
     form.addEventListener("submit", (event) => {
       event.preventDefault();
 
@@ -241,26 +252,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
       let formData = new FormData(form);
 
-      const obj = {};
-      formData.forEach(function (value, key) {
-        obj[key] = value;
-      });
+      const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-      fetch("server.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(obj),
-      })
-        .then((data) => data.text())
+			postData("http://localhost:3000/requests",json)
         .then((data) => {
           console.log(data);
           showThanksModal(message.succes);
           statusMessage.remove();
         })
-        .catch(() => {
+        .catch((error) => {
           showThanksModal(message.error);
+					console.log(error);
         })
         .finally(() => {
           form.reset();
@@ -292,10 +294,13 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   forms.forEach((item) => {
-    postData(item);
+    bindpostData(item);
   });
 
-  fetch("http://localhost:3000/menu")
-    .then((data) => data.json())
-    .then((res) => console.log(res));
+  
+  const header = new Headers({ "Access-Control-Allow-Origin": "*" });
+
+  fetch("http://localhost:3000/menu", { header: header })
+    .then((response) => response.json())
+    .then((users) => console.log(users));
 });

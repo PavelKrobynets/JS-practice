@@ -211,6 +211,7 @@ window.addEventListener("DOMContentLoaded", () => {
   //     ).showOnPage();
   //   });
   // });
+
   axios.get("http://localhost:3000/menu").then((data) => {
     data.data.forEach(({ img, altimg, title, descr, price }) => {
       new MenuCard(
@@ -223,6 +224,7 @@ window.addEventListener("DOMContentLoaded", () => {
       ).showOnPage();
     });
   });
+
   // getResource("http://localhost:3000/menu")
   // .then(data => createCard(data));
 
@@ -244,6 +246,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // 		document.querySelector('.menu .container').append(element);
   // 	})
   // }
+
   // Forms
 
   const forms = document.querySelectorAll("form"),
@@ -328,4 +331,46 @@ window.addEventListener("DOMContentLoaded", () => {
   fetch("http://localhost:3000/menu", { header: header })
     .then((response) => response.json())
     .then((users) => console.log(users));
+
+  // Slider
+
+  const number = document.querySelector("#current"),
+    arrowPrev = document.querySelector(".offer__slider-prev"),
+    arrowNext = document.querySelector(".offer__slider-next"),
+    slides = document.querySelectorAll(".offer__slide");
+
+  function hideSlide() {
+    slides.forEach((item) => {
+      item.classList.remove("show", "fade");
+      item.classList.add("hide");
+    });
+  }
+
+  function showSlide(i = 0) {
+    slides[i - 1].classList.add("show", "fade");
+    slides[i - 1].classList.remove("hide");
+  }
+  hideSlide();
+  showSlide(number.textContent);
+
+  arrowNext.addEventListener("click", () => {
+    if (number.textContent < slides.length) {
+      number.textContent++;
+    } else {
+      number.textContent = 1;
+    }
+    hideSlide();
+    showSlide(number.textContent);
+    getZero(number.textContent);
+  });
+
+  arrowPrev.addEventListener("click", () => {
+    if (number.textContent > 1) {
+      number.textContent--;
+    } else {
+      number.textContent = slides.length;
+    }
+    hideSlide();
+    showSlide(number.textContent);
+  });
 });

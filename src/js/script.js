@@ -361,7 +361,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     hideSlide();
     showSlide(number.textContent);
-    getZero(number.textContent);
+    number.textContent = `0${number.textContent}`
   });
 
   arrowPrev.addEventListener("click", () => {
@@ -372,5 +372,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     hideSlide();
     showSlide(number.textContent);
+		number.textContent = `0${number.textContent}`
   });
 });

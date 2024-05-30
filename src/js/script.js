@@ -376,6 +376,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // });
 
   const slidesWrapper = document.querySelector(".offer__slider-wrapper"),
+    slider = document.querySelector(".offer__slider"),
     slides = slidesWrapper.querySelectorAll(".offer__slide"),
     prev = document.querySelector(".offer__slider-prev"),
     next = document.querySelector(".offer__slider-next"),
@@ -403,6 +404,35 @@ window.addEventListener("DOMContentLoaded", () => {
     slide.style.width = width;
   });
 
+  slider.style.position = "relative";
+
+  const indicators = document.createElement("ol");
+  indicators.classList.add("carousel-indicators");
+  slider.append(indicators);
+
+  for (let i = 0; i < slides.length; i++) {
+    const indicator = document.createElement("li");
+    indicator.classList.add("dot");
+    indicator.setAttribute("data-slide-to", i + 1);
+    indicators.append(indicator);
+  }
+  const dot = document.querySelectorAll(".dot");
+  dot[0].style.opacity = "1";
+
+  function dotsOpacity(dot) {
+    dot.forEach((item) => {
+      item.style.opacity = "0.5";
+    });
+    dot[slideIndex - 1].style.opacity = "1";
+  }
+  function currentNumb() {
+    if (slides.length < 10) {
+      current.textContent = `0${slideIndex}`;
+    } else {
+      current.textContent = slideIndex;
+    }
+  }
+
   next.addEventListener("click", () => {
     if (offset == +width.slice(0, -2) * (slides.length - 1)) {
       offset = 0;
@@ -416,12 +446,10 @@ window.addEventListener("DOMContentLoaded", () => {
       slideIndex++;
     }
 
-    if (slides.length < 10) {
-      current.textContent = `0${slideIndex}`;
-    } else {
-      current.textContent = slideIndex;
-    }
+    currentNumb();
+    dotsOpacity(dot);
   });
+
   prev.addEventListener("click", () => {
     if (offset == 0) {
       offset = +width.slice(0, -2) * (slides.length - 1);
@@ -436,10 +464,16 @@ window.addEventListener("DOMContentLoaded", () => {
       slideIndex--;
     }
 
-    if (slides.length < 10) {
-      current.textContent = `0${slideIndex}`;
-    } else {
-      current.textContent = slideIndex;
-    }
+    currentNumb();
+    dotsOpacity(dot);
+  });
+  dot.forEach((item) => {
+    item.addEventListener("click", (e) => {
+      slideIndex = e.target.getAttribute("data-slide-to");
+      offset = +width.slice(0, -2) * (slideIndex - 1);
+      slidesField.style.transform = `translateX(-${offset}px)`;
+      currentNumb();
+      dotsOpacity(dot);
+    });
   });
 });

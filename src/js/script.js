@@ -432,12 +432,15 @@ window.addEventListener("DOMContentLoaded", () => {
       current.textContent = slideIndex;
     }
   }
+	function toNumb(string){
+		return +string.replace(/D/g, '');
+	}
 
   next.addEventListener("click", () => {
-    if (offset == +width.slice(0, -2) * (slides.length - 1)) {
+    if (offset == toNumb(width) * (slides.length - 1)) {
       offset = 0;
     } else {
-      offset += +width.slice(0, -2);
+      offset += toNumb(width);
     }
     slidesField.style.transform = `translateX(-${offset}px)`;
     if (slideIndex == slides.length) {
@@ -452,9 +455,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   prev.addEventListener("click", () => {
     if (offset == 0) {
-      offset = +width.slice(0, -2) * (slides.length - 1);
+      offset = toNumb(width) * (slides.length - 1);
     } else {
-      offset -= +width.slice(0, -2);
+      offset -= toNumb(width);
     }
     slidesField.style.transform = `translateX(-${offset}px)`;
 
@@ -470,7 +473,7 @@ window.addEventListener("DOMContentLoaded", () => {
   dot.forEach((item) => {
     item.addEventListener("click", (e) => {
       slideIndex = e.target.getAttribute("data-slide-to");
-      offset = +width.slice(0, -2) * (slideIndex - 1);
+      offset = toNumb(width) * (slideIndex - 1);
       slidesField.style.transform = `translateX(-${offset}px)`;
       currentNumb();
       dotsOpacity(dot);

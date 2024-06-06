@@ -1,25 +1,16 @@
-import * as modal from "./modal.js";
+import {closeModal, openModal} from "./modal.js";
+import { postData } from "../services/services.js";
 
-export function form() {
+export function form(formSelector, modalTimerId) {
   // Form
 
-  const forms = document.querySelectorAll("form"),
+  const forms = document.querySelectorAll(formSelector),
     message = {
       loading: "icons/005 spinner.svg",
       succes: "Thank you! We'll conect you soon",
       error: "Oops... Something went wrong",
     };
 
-  const postData = async (url, data) => {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: data,
-    });
-    return await res.json();
-  };
 
   function bindpostData(form) {
     form.addEventListener("submit", (event) => {
@@ -40,11 +31,11 @@ export function form() {
       postData("http://localhost:3000/requests", json)
         .then((data) => {
           console.log(data);
-          modal.modal.showThanksModal(message.succes);
+          showThanksModal(message.succes);
           statusMessage.remove();
         })
         .catch((error) => {
-          modal.modal.showThanksModal(message.error);
+          showThanksModal(message.error);
           console.log(error);
         })
         .finally(() => {
@@ -56,7 +47,7 @@ export function form() {
   function showThanksModal(message) {
     const prevModalDialog = document.querySelector(".modal__dialog");
     prevModalDialog.classList.add("hide");
-    modal.modal.openModal();
+    openModal('.modal', modalTimerId);
 
     const thanksModal = document.createElement("div");
     thanksModal.classList.add("modal__dialog");
@@ -72,7 +63,7 @@ export function form() {
       thanksModal.remove();
       prevModalDialog.classList.add("show");
       prevModalDialog.classList.remove("hide");
-      modal.modal.closeModal();
+      closeModal('.modal');
     }, 4000);
   }
 
@@ -83,6 +74,7 @@ export function form() {
   const header = new Headers({ "Access-Control-Allow-Origin": "*" });
 
   fetch("http://localhost:3000/menu", { header: header })
-    .then((response) => response.json())
-    .then((users) => console.log(users));
+	.then((response) =>
+    response.json()
+  ).catch(error => console.log(error));
 }

@@ -1,158 +1,45 @@
-export function slider({
-	container,
-	slide,
-	nextArrow,
-	prevArrow,
-	totalCounter,
-	currentCounter,
-	wrapper,
-	field
-}) {
-  // Slider
+export function slider({ arrowPrev, arrowNext, currentSlide, slides }) {
+  const prev = document.querySelector(arrowPrev),
+    next = document.querySelector(arrowNext),
+    current = document.querySelector(currentSlide),
+    allSlides = document.querySelectorAll(slides);
 
-  // const number = document.querySelector("#current"),
-  //   arrowPrev = document.querySelector(".offer__slider-prev"),
-  //   arrowNext = document.querySelector(".offer__slider-next"),
-  //   slides = document.querySelectorAll(".offer__slide");
-
-  // function hideSlide() {
-  //   slides.forEach((item) => {
-  //     item.classList.remove("show", "fade");
-  //     item.classList.add("hide");
-  //   });
-  // }
-
-  // function showSlide(i = 0) {
-  //   slides[i - 1].classList.add("show", "fade");
-  //   slides[i - 1].classList.remove("hide");
-  // }
-  // hideSlide();
-  // showSlide(number.textContent);
-
-  // arrowNext.addEventListener("click", () => {
-  //   if (number.textContent < slides.length) {
-  //     number.textContent++;
-  //   } else {
-  //     number.textContent = 1;
-  //   }
-  //   hideSlide();
-  //   showSlide(number.textContent);
-  //   number.textContent = `0${number.textContent}`
-  // });
-
-  // arrowPrev.addEventListener("click", () => {
-  //   if (number.textContent > 1) {
-  //     number.textContent--;
-  //   } else {
-  //     number.textContent = slides.length;
-  //   }
-  //   hideSlide();
-  //   showSlide(number.textContent);
-  // 	number.textContent = `0${number.textContent}`
-  // });
-
-  const slidesWrapper = document.querySelector(wrapper),
-    slider = document.querySelector(container),
-    slides = slidesWrapper.querySelectorAll(slide),
-    prev = document.querySelector(prevArrow),
-    next = document.querySelector(nextArrow),
-    total = document.querySelector(totalCounter),
-    current = document.querySelector(currentCounter),
-    slidesField = document.querySelector(field),
-    width = window.getComputedStyle(slidesWrapper).width;
-  let slideIndex = 1,
-    offset = 0;
-
-  if (slides.length < 10) {
-    total.textContent = `0${slides.length}`;
-    current.textContent = `0${slideIndex}`;
-  } else {
-    total.textContent = slides.length;
-    current.textContent = slideIndex;
-  }
-
-  slidesField.style.width = 100 * slides.length + "%";
-  slidesField.style.display = "flex";
-  slidesField.style.transition = "0.5s all";
-  slidesWrapper.style.overflow = "hidden";
-
-  slides.forEach((slide) => {
-    slide.style.width = width;
-  });
-
-  slider.style.position = "relative";
-
-  const indicators = document.createElement("ol");
-  indicators.classList.add("carousel-indicators");
-  slider.append(indicators);
-
-  for (let i = 0; i < slides.length; i++) {
-    const indicator = document.createElement("li");
-    indicator.classList.add("dot");
-    indicator.setAttribute("data-slide-to", i + 1);
-    indicators.append(indicator);
-  }
-  const dot = document.querySelectorAll(".dot");
-  dot[0].style.opacity = "1";
-
-  function dotsOpacity(dot) {
-    dot.forEach((item) => {
-      item.style.opacity = "0.5";
+  function hideSlide() {
+    allSlides.forEach((slide) => {
+      slide.classList.remove("show", "fade"), slide.classList.add("hide");
     });
-    dot[slideIndex - 1].style.opacity = "1";
   }
-  function currentNumb() {
-    if (slides.length < 10) {
-      current.textContent = `0${slideIndex}`;
-    } else {
-      current.textContent = slideIndex;
-    }
-  }
-  function toNumb(string) {
-    return +string.replace(/\D/g, "");
-  }
-  next.addEventListener("click", () => {
-    if (offset == toNumb(width) * (slides.length - 1)) {
-      offset = 0;
-    } else {
-      offset += toNumb(width);
-    }
-    slidesField.style.transform = `translateX(-${offset}px)`;
-    if (slideIndex == slides.length) {
-      slideIndex = 1;
-    } else {
-      slideIndex++;
-    }
+  hideSlide();
 
-    currentNumb();
-    dotsOpacity(dot);
+  function showSlide(i = 0) {
+    allSlides[i - 1].classList.remove("hide");
+    allSlides[i - 1].classList.add("show", "fade");
+  }
+  showSlide(current.textContent);
+
+  next.addEventListener("click", () => {
+    if (current.textContent < allSlides.length && current.textContent < 10) {
+      current.textContent++;
+      current.textContent = `0${current.textContent}`;
+    } else if (current.textContent >= 10) {
+      current.textContent++;
+    } else {
+      current.textContent = 1;
+      current.textContent = `0${current.textContent}`;
+    }
+		hideSlide();
+    showSlide(current.textContent);
   });
 
   prev.addEventListener("click", () => {
-    if (offset == 0) {
-      offset = toNumb(width) * (slides.length - 1);
+    if (current.textContent > 1) {
+      current.textContent--;
+      current.textContent = `0${current.textContent}`;
     } else {
-      offset -= toNumb(width);
+      current.textContent = allSlides.length;
+      current.textContent = `0${current.textContent}`;
     }
-    slidesField.style.transform = `translateX(-${offset}px)`;
-
-    if (slideIndex == 1) {
-      slideIndex = slides.length;
-    } else {
-      slideIndex--;
-    }
-
-    currentNumb();
-    dotsOpacity(dot);
-  });
-  dot.forEach((item) => {
-    item.addEventListener("click", (e) => {
-      slideIndex = e.target.getAttribute("data-slide-to");
-      offset = toNumb(width) * (slideIndex - 1);
-      slidesField.style.transform = `translateX(-${offset}px)`;
-      currentNumb();
-      dotsOpacity(dot);
-    });
+		hideSlide();
+    showSlide(current.textContent);
   });
 }
-

@@ -1,41 +1,31 @@
-export function tabs(tabsSelector, tabsContentSelector, tabsParentSelector, activeClass) {
-  // Tabs
+export function tabs(tabsContent, tabs, activeClass) {
+  const tabItems = document.querySelectorAll(tabsContent),
+    tabsHeader = document.querySelectorAll(tabs);
 
-  const tabs = document.querySelectorAll(tabsSelector),
-    tabsContent = document.querySelectorAll(tabsContentSelector),
-    tabsParrent = document.querySelector(tabsParentSelector);
-
-  function hidetabContent() {
-    tabsContent.forEach((item) => {
+  function hideTabContent() {
+    tabItems.forEach((item) => {
       item.classList.remove("show", "fade");
       item.classList.add("hide");
     });
 
-    tabs.forEach((tab) => {
-      tab.classList.remove(activeClass);
+    tabsHeader.forEach((tab) => {
+      tab.classList.remove(activeClass.slice(1));
     });
   }
+  hideTabContent();
 
-  function showTabContent(i = 0) {
-    tabsContent[i].classList.remove("hide");
-    tabsContent[i].classList.add("show", "fade");
-    tabs[i].classList.add(activeClass);
-  }
+	function showContent(i = 0){
+		tabItems[i].classList.remove("hide");
+		tabItems[i].classList.add("show", "fade")
+		tabsHeader[i].classList.add(activeClass.slice(1))
+	}
+	showContent();
 
-  hidetabContent();
-  showTabContent();
 
-  tabsParrent.addEventListener("click", (event) => {
-    const target = event.target;
-
-    if (target && target.classList.contains(tabsSelector.slice(1))) {
-      tabs.forEach((item, i) => {
-        if (target == item) {
-          hidetabContent();
-          showTabContent(i);
-        }
-      });
-    }
-  });
+	tabsHeader.forEach((item, i) => {
+		item.addEventListener('click', e => {
+			hideTabContent();
+			showContent(i);
+		})
+	})
 }
-

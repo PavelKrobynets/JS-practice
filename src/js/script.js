@@ -14,5 +14,4 @@ window.addEventListener("DOMContentLoaded", () => {
     slides: ".offer__slide",
   });
   modal.modal("[data-modal]", ".modal", modalTimerId);
-
 });

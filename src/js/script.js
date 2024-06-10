@@ -5,6 +5,7 @@ import * as modal from "./modules/modal.js";
 import { form } from "./modules/form.js";
 import { calculator } from "./modules/calculator.js";
 import { cards } from "./modules/cards.js";
+import { timer } from "./modules/timer.js";
 
 window.addEventListener("DOMContentLoaded", () => {
   const modalTimerId = setTimeout(() => {
@@ -22,4 +23,5 @@ window.addEventListener("DOMContentLoaded", () => {
   form(modalTimerId);
   calculator();
   cards();
+  timer(".timer", "2024-10-09");
 });
